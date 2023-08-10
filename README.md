@@ -10,7 +10,7 @@ We number each combination of control flow for any number of if statements resul
 
 Imagine you have 1,000,000 records and you have 5 if statements to do over them. The traditional approach would be to do 1,000,000 × 5 = 5,000,000 if statements. This processes 1 record at a time.
 
-The alternative is that the 1,000,000 records are packed into a SIMDable 256 bit or 512 bit vector and we run 32 if statements at a time assuming each field is 8 bytes for 256 bit SIMD. So this requires 3 SIMD instructions per if statement (CMP, ADD, SUB). This gives us 1,000,000 × 3 = 3,000,000 SIMD instructions that processes 32 records at a time.
+The alternative is that the 1,000,000 records are packed into a SIMDable 256 bit or 512 bit vector and we run 32 if statements at a time assuming each field is 8 bytes for 256 bit SIMD. So this requires 2 SIMD instructions per if statement (CMP, SUB). This gives us 62,000 SIMD instructions that processes 32 records at a time.
 
 We do it by doing code generation for every permutation of code that a group of if statements maps to. This is **control flow polymorphisation**.
 
