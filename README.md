@@ -18,6 +18,24 @@ If you have all your data in a collection and you want to process it, we can pro
 
 The idea is that we can compress all if statements into one switch table, which is amortized across multiple records at a time.
 
+We are in effect running the if statement 1 for records 1-32 in parallel.
+
+Then we run if for records 1-32 for if statement 2.
+
+Then we run if for records 1-23 for if statement 3.
+
+```
+if (predicate1(data)) {
+
+}
+if (predicate2(data)) {
+
+}
+if (predicate3(data)) {
+
+}
+```
+
 ```
 comparison_vector_1 = 0, 0, 0, 0, 0
 comparison_vector_2 = 0, 0, 0, 0, 0
