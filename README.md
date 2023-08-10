@@ -22,7 +22,7 @@ We are in effect running the if statement 1 for records 1-32 in parallel.
 
 Then we run if for records 1-32 for if statement 2.
 
-Then we run if for records 1-23 for if statement 3.
+Then we run if for records 1-32 for if statement 3.
 
 ```
 if (predicate1(data)) {
