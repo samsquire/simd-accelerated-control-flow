@@ -4,7 +4,7 @@ This is an idea I had while learning about SIMD.
 
 I think SIMD can be used to accelerate high indirection, **control flow** heavy code as used by dynamic languages, specifically **comparison statements**.
 
-The idea is that we can run multiple SIMD CMP sequentially (representing if statements for multiple records) and subtract them all and then map that to an integer of permutation of straight line control flow and use a jump table to dispatch to that permutation. Essentially, we run 32 if statements for 32 records at a time.
+I had the idea we can spider our if statements in our code, work out every permutation of them and run multiple SIMD CMP sequentially (representing parallel if statements for multiple records) and **subtract those vectors** because that is commutative and then map that to an integer of permutation of straight line control flow and use a jump table to dispatch to that permutation of control flow. Essentially, we run 32 if statements for 32 records at a time.
 
 We number each combination of control flow for any number of if statements resulting control flow and then map it to a single number which we use a jump table to dispatch all the behaviour based on that data item.
 
