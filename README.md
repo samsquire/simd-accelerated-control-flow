@@ -2,7 +2,7 @@
 
 This is an idea I had while learning about SIMD.
 
-I think SIMD can be used to accelerate high indirection, **control flow** heavy code as used by dynamic languages, specifically **comparison statements**.
+I think SIMD can be used to accelerate high indirection, **control flow** heavy code as used by dynamic languages, specifically **comparison operations**.
 
 I had the idea we can spider our if statements in our code, work out every permutation of them and run multiple SIMD CMP sequentially (representing parallel if statements for multiple records) and **subtract those vectors** because that is commutative and then map that to an integer of permutation of straight line control flow and use a jump table to dispatch to that permutation of control flow. Essentially, we run 32 if statements for 32 records at a time. I call it control flow monomorphisation, because you have to generate code for each permutation of all your if statements. You can do the dispatch in a separate threads for even more throughput.
 
@@ -19,19 +19,20 @@ If you have all your data in a collection and you want to process it, we can pro
 The idea is that we can compress all if statements into one switch table, which is amortized across multiple records at a time.
 
 ```
+comparison_vector_1 = 0, 0, 0, 0, 0
+comparison_vector_2 = 0, 0, 0, 0, 0
 data_vector = 1, 2, 3, 4, 5
-case_vector = 0, 0, 0, 0, 0
-predicate_1_cmp = SIMD CMP predicate1 data_vector
-SIMD ADD predicate_1_cmp 1
-SIMD SUB case_vector predicate_1_cmp  // this raises the integer into this if-statements/branches integer space
-predicate_2_cmp = SIMD CMP predicate2 data_vector
-SIMD ADD predicate_2_cmp 1
+case_vector = 0, 0, 0, 0, 0 // this is used for dispatch to control flow
+predicate_1_cmp = SIMD CMP operator comparison_vector_1 data_vector
+SIMD SUB case_vector predicate_1_cmp
+
+SIMD SUB case_vector predicate_1_cmp  // this raises (lowers) the integer into this if-statements/branches integer space
+predicate_2_cmp = SIMD CMP operator comparison_vector_2 data_vector
 SIMD SUB case_vector predicate_2_cmp
 
-
-// ideally in separate threads
+// then ideally in separate threads
 switch (case_vector[idx]) {
-    // every permutation of code attached to data item
+    // dispatch to the exact permutation of the control flow graph without needing if-statements or branching
 }
 ```
 
