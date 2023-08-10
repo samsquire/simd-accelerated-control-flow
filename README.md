@@ -4,6 +4,8 @@ This is an idea I had while learning about SIMD.
 
 I think SIMD can be used to accelerate high indirection, **control flow** heavy code as used by dynamic languages, specifically **comparison statements**.
 
+The idea is that we can run multiple SIMD CMP sequentially (representing if statements for multiple records) and subtract them all and then map that to an integer of permutation of straight line control flow and use a jump table to dispatch to that permutation. Essentially, we run 32 if statements for 32 records at a time.
+
 We number each combination of control flow for any number of if statements resulting control flow and then map it to a single number which we use a jump table to dispatch all the behaviour based on that data item.
 
 Imagine you have 1,000,000 records and you have 5 if statements to do over them. The traditional approach would be to do 1,000,000 × 5 = 5,000,000 if statements. This processes 1 record at a time.
